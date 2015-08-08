@@ -15,6 +15,7 @@
 		E7E544D81B7667EE006E3021 /* TFDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544D21B7667EE006E3021 /* TFDetailViewController.m */; };
 		E7E544D91B7667EE006E3021 /* TFMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544D41B7667EE006E3021 /* TFMasterViewController.m */; };
 		E7E544DC1B766A77006E3021 /* TFLiveDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544DB1B766A77006E3021 /* TFLiveDataSource.m */; };
+		E7E544E11B768BA6006E3021 /* UIImage+TFSubwayLine.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544E01B768BA6006E3021 /* UIImage+TFSubwayLine.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,8 @@
 		E7E544DA1B766A77006E3021 /* TFLiveDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFLiveDataSource.h; sourceTree = "<group>"; };
 		E7E544DB1B766A77006E3021 /* TFLiveDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFLiveDataSource.m; sourceTree = "<group>"; };
 		E7E544DE1B76810C006E3021 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		E7E544DF1B768BA6006E3021 /* UIImage+TFSubwayLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+TFSubwayLine.h"; sourceTree = "<group>"; };
+		E7E544E01B768BA6006E3021 /* UIImage+TFSubwayLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+TFSubwayLine.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +130,8 @@
 		E7E544D61B7667EE006E3021 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				E7E544DF1B768BA6006E3021 /* UIImage+TFSubwayLine.h */,
+				E7E544E01B768BA6006E3021 /* UIImage+TFSubwayLine.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -206,6 +211,7 @@
 				E7E544D71B7667EE006E3021 /* TFAppDelegate.m in Sources */,
 				E7E544DC1B766A77006E3021 /* TFLiveDataSource.m in Sources */,
 				E7E544B41B766740006E3021 /* main.m in Sources */,
+				E7E544E11B768BA6006E3021 /* UIImage+TFSubwayLine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

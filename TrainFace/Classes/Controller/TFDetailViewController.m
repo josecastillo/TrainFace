@@ -7,6 +7,7 @@
 //
 
 #import "TFDetailViewController.h"
+#import "UIImage+TFSubwayLine.h"
 
 @interface TFDetailViewController ()
 
@@ -25,6 +26,7 @@
 }
 
 - (void)configureView {
+    self.lineImageView.image = [UIImage imageForSubwayLine:self.detailItem[@"line"] withSize:100.0f];
     self.lineLabel.text = self.detailItem[@"line"];
     self.statusLabel.text = self.detailItem[@"status"];
     self.textView.text = self.detailItem[@"detail_short"];

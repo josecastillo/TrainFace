@@ -9,6 +9,8 @@
 #import "TFMasterViewController.h"
 #import "TFDetailViewController.h"
 #import "TFLiveDataSource.h"
+#import "UIImage+TFSubwayLine.h"
+
 #import "Constants.h"
 
 @interface TFMasterViewController ()
@@ -99,6 +101,7 @@
     NSDictionary *lineStatus = self.systemStatus[kLiveDataSourceKeyLines][line];
     cell.textLabel.text = line;
     cell.detailTextLabel.text = lineStatus[kLiveDataSourceKeyStatus];
+    cell.imageView.image = [UIImage imageForSubwayLine:line withSize:44];
     return cell;
 }
 
