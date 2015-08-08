@@ -23,6 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)];
     self.navigationItem.rightBarButtonItem = refreshButton;
@@ -58,6 +59,19 @@
 }
 
 #pragma mark - Table View
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellEditingStyleNone;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+    NSString *line = self.lines[sourceIndexPath.row];
+    [self.lines removeObjectAtIndex:sourceIndexPath.row];
+    [self.lines insertObject:line atIndex:destinationIndexPath.row];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:self.lines forKey:kUserDefaultsKeyLines];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
