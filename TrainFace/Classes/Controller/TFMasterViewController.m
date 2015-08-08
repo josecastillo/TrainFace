@@ -27,6 +27,15 @@
 
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)];
     self.navigationItem.rightBarButtonItem = refreshButton;
+    UILabel *timestampLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
+    timestampLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+    timestampLabel.textAlignment = NSTextAlignmentCenter;
+    self.toolbarItems = @[
+                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                          [[UIBarButtonItem alloc] initWithCustomView:timestampLabel],
+                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                          ];
+    self.timestampLabel = timestampLabel;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -43,6 +52,7 @@
 
 - (void)refresh:(UIBarButtonItem *)sender {
     self.systemStatus = [[TFLiveDataSource defaultSource] status];
+    self.timestampLabel.text = [NSString stringWithFormat:@"Last updated: %@", self.systemStatus[kLiveDataSourceKeyTimestamp]];
     [self.tableView reloadData];
 }
 

@@ -13,6 +13,6 @@
 @interface TFMasterViewController : UITableViewController
 
 @property (strong, nonatomic) TFDetailViewController *detailViewController;
-
+@property (weak, nonatomic) UILabel *timestampLabel;
 @end
 
