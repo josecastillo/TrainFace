@@ -16,6 +16,7 @@
 		E7E544D91B7667EE006E3021 /* TFMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544D41B7667EE006E3021 /* TFMasterViewController.m */; };
 		E7E544DC1B766A77006E3021 /* TFLiveDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544DB1B766A77006E3021 /* TFLiveDataSource.m */; };
 		E7E544E11B768BA6006E3021 /* UIImage+TFSubwayLine.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544E01B768BA6006E3021 /* UIImage+TFSubwayLine.m */; };
+		E7E544E71B769B8A006E3021 /* UIColor+TFAlertColors.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544E61B769B8A006E3021 /* UIColor+TFAlertColors.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,8 @@
 		E7E544DE1B76810C006E3021 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		E7E544DF1B768BA6006E3021 /* UIImage+TFSubwayLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+TFSubwayLine.h"; sourceTree = "<group>"; };
 		E7E544E01B768BA6006E3021 /* UIImage+TFSubwayLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+TFSubwayLine.m"; sourceTree = "<group>"; };
+		E7E544E51B769B8A006E3021 /* UIColor+TFAlertColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+TFAlertColors.h"; sourceTree = "<group>"; };
+		E7E544E61B769B8A006E3021 /* UIColor+TFAlertColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+TFAlertColors.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +135,8 @@
 			children = (
 				E7E544DF1B768BA6006E3021 /* UIImage+TFSubwayLine.h */,
 				E7E544E01B768BA6006E3021 /* UIImage+TFSubwayLine.m */,
+				E7E544E51B769B8A006E3021 /* UIColor+TFAlertColors.h */,
+				E7E544E61B769B8A006E3021 /* UIColor+TFAlertColors.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -206,6 +211,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7E544E71B769B8A006E3021 /* UIColor+TFAlertColors.m in Sources */,
 				E7E544D91B7667EE006E3021 /* TFMasterViewController.m in Sources */,
 				E7E544D81B7667EE006E3021 /* TFDetailViewController.m in Sources */,
 				E7E544D71B7667EE006E3021 /* TFAppDelegate.m in Sources */,

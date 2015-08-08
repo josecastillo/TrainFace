@@ -10,6 +10,7 @@
 #import "TFDetailViewController.h"
 #import "TFLiveDataSource.h"
 #import "UIImage+TFSubwayLine.h"
+#import "UIColor+TFAlertColors.h"
 
 #import "Constants.h"
 
@@ -99,9 +100,11 @@
     
     NSString *line = self.lines[indexPath.row];
     NSDictionary *lineStatus = self.systemStatus[kLiveDataSourceKeyLines][line];
-    cell.textLabel.text = line;
-    cell.detailTextLabel.text = lineStatus[kLiveDataSourceKeyStatus];
+    cell.textLabel.text = lineStatus[kLiveDataSourceKeyStatus];
+    cell.textLabel.textColor = [UIColor colorForAlertLevel:[lineStatus[@"alert"] integerValue]];
+    
     cell.imageView.image = [UIImage imageForSubwayLine:line withSize:44];
+    cell.imageView.accessibilityLabel = [line stringByAppendingString:@" Train"];
     return cell;
 }
 
