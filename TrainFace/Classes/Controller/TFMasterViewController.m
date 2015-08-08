@@ -39,11 +39,12 @@
                           [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                           ];
     self.timestampLabel = timestampLabel;
+
+    [self refresh:self.navigationItem.rightBarButtonItem];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     self.clearsSelectionOnViewWillAppear = YES;
-    [self refresh:self.navigationItem.rightBarButtonItem];
     self.lines = [[[NSUserDefaults standardUserDefaults] arrayForKey:kUserDefaultsKeyLines] mutableCopy];
     [super viewWillAppear:animated];
 }
@@ -54,9 +55,29 @@
 }
 
 - (void)refresh:(UIBarButtonItem *)sender {
-    self.systemStatus = [[TFLiveDataSource defaultSource] status];
-    self.timestampLabel.text = [NSString stringWithFormat:@"Last updated: %@", self.systemStatus[kLiveDataSourceKeyTimestamp]];
-    [self.tableView reloadData];
+    [[TFLiveDataSource defaultSource] refresh:^(NSError *error) {
+        if (error) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error Refreshing Status"
+                                                                           message:[error localizedDescription]
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                      style:UIAlertActionStyleCancel
+                                                    handler:nil]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Try Again"
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                                                        [self refresh:self.navigationItem.rightBarButtonItem];
+                                                    }]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        self.systemStatus = [[TFLiveDataSource defaultSource] status];
+        if (self.systemStatus) {
+            self.timestampLabel.text = [NSString stringWithFormat:@"Last updated: %@", self.systemStatus[kLiveDataSourceKeyTimestamp]];
+        } else {
+            self.timestampLabel.text = @"No data! Try refreshing.";
+        }
+        [self.tableView reloadData];
+    }];
 }
 
 #pragma mark - Segues
@@ -87,7 +108,7 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return self.systemStatus ? 1 : 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

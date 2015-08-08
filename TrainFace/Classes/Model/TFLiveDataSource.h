@@ -8,10 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void (^TFLiveDataSourceCompletionHandler)(NSError *error);
+
 @interface TFLiveDataSource : NSObject
 
 + (instancetype)defaultSource;
 
+- (void)refresh:(TFLiveDataSourceCompletionHandler)completionHandler;
 - (NSDictionary *)status;
 
 @end

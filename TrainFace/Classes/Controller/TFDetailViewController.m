@@ -27,9 +27,10 @@
 
 - (void)configureView {
     self.lineImageView.image = [UIImage imageForSubwayLine:self.detailItem[@"line"] withSize:100.0f];
-    self.lineLabel.text = self.detailItem[@"line"];
+    self.lineLabel.text = [self.detailItem[@"line"] stringByAppendingString:@" Train"];
     self.statusLabel.text = self.detailItem[@"status"];
-    self.textView.text = self.detailItem[@"detail_short"];
+    // FIXME: Text view is not scrolled to top when detail view appears. 
+    self.textView.text = self.detailItem[@"detail"];
 }
 
 - (void)viewDidLoad {
