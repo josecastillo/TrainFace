@@ -45,7 +45,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     self.clearsSelectionOnViewWillAppear = YES;
-    self.lines = [[[NSUserDefaults standardUserDefaults] arrayForKey:kUserDefaultsKeyLines] mutableCopy];
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.net.panchromatic.trainface"];
+    self.lines = [[defaults arrayForKey:kUserDefaultsKeyLines] mutableCopy];
     [super viewWillAppear:animated];
 }
 
@@ -103,8 +104,9 @@
     [self.lines removeObjectAtIndex:sourceIndexPath.row];
     [self.lines insertObject:line atIndex:destinationIndexPath.row];
     
-    [[NSUserDefaults standardUserDefaults] setObject:self.lines forKey:kUserDefaultsKeyLines];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.net.panchromatic.trainface"];
+    [defaults setObject:self.lines forKey:kUserDefaultsKeyLines];
+    [defaults synchronize];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

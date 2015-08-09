@@ -19,7 +19,7 @@
 @implementation TFAppDelegate
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(nullable NSDictionary *)launchOptions {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.net.panchromatic.trainface"];
     if (![defaults objectForKey:kUserDefaultsKeyLines]) {
         NSArray *lines = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"A", @"C", @"E", @"B", @"D", @"F", @"M", @"G", @"J", @"Z", @"L", @"N", @"Q", @"R"];
         [defaults setObject:lines forKey:kUserDefaultsKeyLines];
@@ -30,8 +30,8 @@
     NSURL *containerUrl = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@"group.net.panchromatic.trainface"];
     NSURL *testUrl = [[containerUrl URLByAppendingPathComponent:@"R"] URLByAppendingPathExtension:@"png"];
     if (![[NSFileManager defaultManager] fileExistsAtPath:[testUrl path]]) {
-        for (NSString *lineName in [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyLines]) {
-            UIImage *lineImage = [UIImage imageForSubwayLine:lineName withSize:40];
+        for (NSString *lineName in [defaults objectForKey:kUserDefaultsKeyLines]) {
+            UIImage *lineImage = [UIImage imageForSubwayLine:lineName withSize:32];
             NSData *pngData = UIImagePNGRepresentation(lineImage);
             NSURL *outputUrl = [[containerUrl URLByAppendingPathComponent:lineName] URLByAppendingPathExtension:@"png"];
             [pngData writeToURL:outputUrl atomically:NO];
