@@ -20,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E73298901B77B3E0006E04A9 /* TrainFace.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TrainFace.entitlements; sourceTree = "<group>"; };
 		E7E544AF1B766740006E3021 /* TrainFace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrainFace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7E544B31B766740006E3021 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E7E544BF1B766740006E3021 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -71,6 +72,7 @@
 		E7E544B11B766740006E3021 /* TrainFace */ = {
 			isa = PBXGroup;
 			children = (
+				E73298901B77B3E0006E04A9 /* TrainFace.entitlements */,
 				E7E544CC1B7667EE006E3021 /* Classes */,
 				E7E544BE1B766740006E3021 /* Main.storyboard */,
 				E7E544C11B766740006E3021 /* Assets.xcassets */,
@@ -172,6 +174,12 @@
 				TargetAttributes = {
 					E7E544AE1B766740006E3021 = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = 5459V76WQG;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -327,6 +335,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TrainFace/TrainFace.entitlements;
 				INFOPLIST_FILE = TrainFace/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.panchromatic.TrainFace;
@@ -338,6 +347,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TrainFace/TrainFace.entitlements;
 				INFOPLIST_FILE = TrainFace/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.panchromatic.TrainFace;

@@ -8,6 +8,8 @@
 
 #import "TFAppDelegate.h"
 #import "TFDetailViewController.h"
+#import "UIImage+TFSubwayLine.h"
+
 #import "Constants.h"
 
 @interface TFAppDelegate ()
@@ -24,6 +26,18 @@
         [defaults synchronize];
     }
     
+    // If we don't have line images generated for the Apple Watch, generate them now.
+    NSURL *containerUrl = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@"group.net.panchromatic.trainface"];
+    NSURL *testUrl = [[containerUrl URLByAppendingPathComponent:@"R"] URLByAppendingPathExtension:@"png"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[testUrl path]]) {
+        for (NSString *lineName in [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyLines]) {
+            UIImage *lineImage = [UIImage imageForSubwayLine:lineName withSize:40];
+            NSData *pngData = UIImagePNGRepresentation(lineImage);
+            NSURL *outputUrl = [[containerUrl URLByAppendingPathComponent:lineName] URLByAppendingPathExtension:@"png"];
+            [pngData writeToURL:outputUrl atomically:NO];
+        }
+    }
+
     return YES;
 }
 
@@ -52,17 +66,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-}
-
-#pragma mark - Split view
-
-- (BOOL)splitViewController:(UISplitViewController *)splitViewController collapseSecondaryViewController:(UIViewController *)secondaryViewController ontoPrimaryViewController:(UIViewController *)primaryViewController {
-    if ([secondaryViewController isKindOfClass:[UINavigationController class]] && [[(UINavigationController *)secondaryViewController topViewController] isKindOfClass:[TFDetailViewController class]] && ([(TFDetailViewController *)[(UINavigationController *)secondaryViewController topViewController] detailItem] == nil)) {
-        // Return YES to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
-        return YES;
-    } else {
-        return NO;
-    }
 }
 
 @end

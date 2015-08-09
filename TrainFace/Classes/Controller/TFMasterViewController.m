@@ -72,7 +72,7 @@
         }
         self.systemStatus = [[TFLiveDataSource defaultSource] status];
         if (self.systemStatus) {
-            self.timestampLabel.text = [NSString stringWithFormat:@"Last updated: %@", self.systemStatus[kLiveDataSourceKeyTimestamp]];
+            self.timestampLabel.text = [NSString stringWithFormat:@"Updated: %@", self.systemStatus[kLiveDataSourceKeyTimestamp]];
         } else {
             self.timestampLabel.text = @"No data! Try refreshing.";
         }
