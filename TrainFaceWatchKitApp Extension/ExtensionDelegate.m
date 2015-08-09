@@ -8,14 +8,43 @@
 
 #import "ExtensionDelegate.h"
 
+#import "Constants.h"
+
 @implementation ExtensionDelegate
 
 - (void)applicationDidFinishLaunching {
-    // Perform any final initialization of your application.
+    WCSession *session = [WCSession defaultSession];
+    session.delegate = self;
+    [session activateSession];
+    self.session = session;
+
+    // If we don't have line images, fetch them from the host app now.
+    NSURL *containerUrl = [[[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] firstObject];
+    NSURL *testUrl = [[containerUrl URLByAppendingPathComponent:@"R"] URLByAppendingPathExtension:@"png"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[testUrl path]]) {
+        [session sendMessage:@{@"command" : @"RequestLineImages"}
+                replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
+                    NSDictionary *files = replyMessage[@"images"];
+                    for (NSString *filename in files) {
+                        NSData *imageData = files[filename];
+                        NSURL *outputUrl = [containerUrl URLByAppendingPathComponent:filename];
+                        [imageData writeToURL:outputUrl atomically:NO];
+                    }
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"TFWDataUpdate" object:self];
+                } errorHandler:nil];
+    }
 }
 
 - (void)applicationDidBecomeActive {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [self.session sendMessage:@{@"command" : @"RequestServiceStatus"}
+                 replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
+                     NSDictionary *lines = replyMessage[@"lines"];
+                     NSDictionary *serviceStatus = replyMessage[@"status"];
+                     [[NSUserDefaults standardUserDefaults] setObject:lines forKey:kUserDefaultsKeyLines];
+                     [[NSUserDefaults standardUserDefaults] setObject:serviceStatus forKey:kUserDefaultsKeyServiceStatus];
+                     [[NSNotificationCenter defaultCenter] postNotificationName:@"TFWDataUpdate" object:self];
+                 }
+                 errorHandler:nil];
 }
 
 - (void)applicationWillResignActive {

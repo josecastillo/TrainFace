@@ -15,10 +15,14 @@
                                 <tableRow identifier="Cell" id="48G-Eb-S5k" customClass="TFWTrainRow">
                                     <group key="rootItem" width="1" alignment="left" id="6Dp-FH-hha">
                                         <items>
-                                            <label height="1" alignment="left" text="Label" id="dFA-vt-Kp2"/>
+                                            <imageView width="32" height="32" alignment="left" verticalAlignment="center" id="Awh-zb-CeA"/>
+                                            <label height="1" alignment="left" text="GOOD SERVICE" numberOfLines="2" id="dFA-vt-Kp2">
+                                                <fontDescription key="font" style="UICTFontTextStyleCaption2"/>
+                                            </label>
                                         </items>
                                     </group>
                                     <connections>
+                                        <outlet property="imageView" destination="Awh-zb-CeA" id="L4g-4D-hl5"/>
                                         <outlet property="textLabel" destination="dFA-vt-Kp2" id="xaf-Yu-ivl"/>
                                     </connections>
                                 </tableRow>

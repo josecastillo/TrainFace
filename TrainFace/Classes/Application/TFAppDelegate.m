@@ -9,6 +9,7 @@
 #import "TFAppDelegate.h"
 #import "TFDetailViewController.h"
 #import "UIImage+TFSubwayLine.h"
+#import "TFLiveDataSource.h"
 
 #import "Constants.h"
 
@@ -19,24 +20,16 @@
 @implementation TFAppDelegate
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(nullable NSDictionary *)launchOptions {
-    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.net.panchromatic.trainface"];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (![defaults objectForKey:kUserDefaultsKeyLines]) {
         NSArray *lines = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"A", @"C", @"E", @"B", @"D", @"F", @"M", @"G", @"J", @"Z", @"L", @"N", @"Q", @"R"];
         [defaults setObject:lines forKey:kUserDefaultsKeyLines];
         [defaults synchronize];
     }
-    
-    // If we don't have line images generated for the Apple Watch, generate them now.
-    NSURL *containerUrl = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@"group.net.panchromatic.trainface"];
-    NSURL *testUrl = [[containerUrl URLByAppendingPathComponent:@"R"] URLByAppendingPathExtension:@"png"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[testUrl path]]) {
-        for (NSString *lineName in [defaults objectForKey:kUserDefaultsKeyLines]) {
-            UIImage *lineImage = [UIImage imageForSubwayLine:lineName withSize:32];
-            NSData *pngData = UIImagePNGRepresentation(lineImage);
-            NSURL *outputUrl = [[containerUrl URLByAppendingPathComponent:lineName] URLByAppendingPathExtension:@"png"];
-            [pngData writeToURL:outputUrl atomically:NO];
-        }
-    }
+
+    WCSession *session = [WCSession defaultSession];
+    session.delegate = self;
+    [session activateSession];
 
     return YES;
 }
@@ -67,5 +60,28 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+#pragma mark - WCSession Delegate
+
+- (void)session:(WCSession *)session didReceiveMessage:(NSDictionary<NSString *, id> *)message replyHandler:(void(^)(NSDictionary<NSString *, id> *replyMessage))replyHandler {
+    NSString *command = message[@"command"];
+    if ([command isEqualToString:@"RequestLineImages"]) {
+        NSMutableDictionary *response = [NSMutableDictionary dictionary];
+        NSArray *lines = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"A", @"C", @"E", @"B", @"D", @"F", @"M", @"G", @"J", @"Z", @"L", @"N", @"Q", @"R"];
+        for (NSString *lineName in lines) {
+            UIImage *lineImage = [UIImage imageForSubwayLine:lineName withSize:32];
+            NSData *pngData = UIImagePNGRepresentation(lineImage);
+            NSString *filename = [NSString stringWithFormat:@"%@.png", lineName];
+            response[filename] = pngData;
+        }
+        replyHandler(@{@"images" : response});
+    } else if ([command isEqualToString:@"RequestServiceStatus"]) {
+        [[TFLiveDataSource defaultSource] refresh:^(NSError *error) {
+            // TODO: Error Handling. For now, pass along whatever we get back even if it's stale data.
+            replyHandler(@{@"status" : [[TFLiveDataSource defaultSource] status], @"lines" : [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyLines]});
+        }];
+    }
+}
+
 
 @end

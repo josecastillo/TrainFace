@@ -10,6 +10,7 @@
 #define Constants_h
 
 #define kUserDefaultsKeyLines (@"lines")
+#define kUserDefaultsKeyServiceStatus (@"service_status")
 
 #define kLiveDataSourceKeyTimestamp (@"timestamp")
 #define kLiveDataSourceKeyLines (@"lines")

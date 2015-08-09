@@ -11,5 +11,6 @@
 
 @interface TFWTrainRow : NSObject
 @property (unsafe_unretained, nonatomic) IBOutlet WKInterfaceLabel *textLabel;
+@property (unsafe_unretained, nonatomic) IBOutlet WKInterfaceImage *imageView;
 
 @end

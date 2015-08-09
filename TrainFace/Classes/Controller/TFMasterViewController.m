@@ -45,7 +45,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     self.clearsSelectionOnViewWillAppear = YES;
-    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.net.panchromatic.trainface"];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.lines = [[defaults arrayForKey:kUserDefaultsKeyLines] mutableCopy];
     [super viewWillAppear:animated];
 }
@@ -104,7 +104,7 @@
     [self.lines removeObjectAtIndex:sourceIndexPath.row];
     [self.lines insertObject:line atIndex:destinationIndexPath.row];
     
-    NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.net.panchromatic.trainface"];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:self.lines forKey:kUserDefaultsKeyLines];
     [defaults synchronize];
 }

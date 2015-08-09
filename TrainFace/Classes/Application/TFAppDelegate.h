@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WatchConnectivity/WatchConnectivity.h>
 
-@interface TFAppDelegate : UIResponder <UIApplicationDelegate>
+@interface TFAppDelegate : UIResponder <UIApplicationDelegate, WCSessionDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E7123E2C1B77ED580070AC66 /* UIColor+TFAlertColors.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544E61B769B8A006E3021 /* UIColor+TFAlertColors.m */; };
 		E721DD601B77C76900AC04C1 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E721DD5E1B77C76900AC04C1 /* Interface.storyboard */; };
 		E721DD621B77C76900AC04C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E721DD611B77C76900AC04C1 /* Assets.xcassets */; };
 		E721DD691B77C76900AC04C1 /* TrainFaceWatchKitApp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E721DD681B77C76900AC04C1 /* TrainFaceWatchKitApp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -84,7 +85,6 @@
 		E721DD741B77C76900AC04C1 /* ComplicationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ComplicationController.m; sourceTree = "<group>"; };
 		E721DD761B77C76900AC04C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E721DD781B77C76900AC04C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E73298901B77B3E0006E04A9 /* TrainFace.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TrainFace.entitlements; sourceTree = "<group>"; };
 		E78F48A91B77C8A60023C8DB /* TFWTrainRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFWTrainRow.h; sourceTree = "<group>"; };
 		E78F48AA1B77C8A60023C8DB /* TFWTrainRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFWTrainRow.m; sourceTree = "<group>"; };
 		E7E544AF1B766740006E3021 /* TrainFace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrainFace.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,7 +176,6 @@
 		E7E544B11B766740006E3021 /* TrainFace */ = {
 			isa = PBXGroup;
 			children = (
-				E73298901B77B3E0006E04A9 /* TrainFace.entitlements */,
 				E7E544CC1B7667EE006E3021 /* Classes */,
 				E7E544BE1B766740006E3021 /* Main.storyboard */,
 				E7E544C11B766740006E3021 /* Assets.xcassets */,
@@ -315,16 +314,27 @@
 					E721DD5B1B77C76900AC04C1 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 5459V76WQG;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 					E721DD671B77C76900AC04C1 = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = 5459V76WQG;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 					E7E544AE1B766740006E3021 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 5459V76WQG;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -385,6 +395,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7123E2C1B77ED580070AC66 /* UIColor+TFAlertColors.m in Sources */,
 				E721DD751B77C76900AC04C1 /* ComplicationController.m in Sources */,
 				E721DD721B77C76900AC04C1 /* ExtensionDelegate.m in Sources */,
 				E721DD6F1B77C76900AC04C1 /* InterfaceController.m in Sources */,
@@ -597,11 +608,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = TrainFace/TrainFace.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = TrainFace/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.panchromatic.transitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -609,11 +622,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = TrainFace/TrainFace.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = TrainFace/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.panchromatic.transitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
