@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E721DD601B77C76900AC04C1 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E721DD5E1B77C76900AC04C1 /* Interface.storyboard */; };
+		E721DD621B77C76900AC04C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E721DD611B77C76900AC04C1 /* Assets.xcassets */; };
+		E721DD691B77C76900AC04C1 /* TrainFaceWatchKitApp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E721DD681B77C76900AC04C1 /* TrainFaceWatchKitApp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E721DD6F1B77C76900AC04C1 /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E721DD6E1B77C76900AC04C1 /* InterfaceController.m */; };
+		E721DD721B77C76900AC04C1 /* ExtensionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E721DD711B77C76900AC04C1 /* ExtensionDelegate.m */; };
+		E721DD751B77C76900AC04C1 /* ComplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E721DD741B77C76900AC04C1 /* ComplicationController.m */; };
+		E721DD771B77C76900AC04C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E721DD761B77C76900AC04C1 /* Assets.xcassets */; };
+		E721DD7B1B77C76900AC04C1 /* TrainFaceWatchKitApp.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = E721DD5C1B77C76900AC04C1 /* TrainFaceWatchKitApp.app */; };
+		E78F48AB1B77C8A60023C8DB /* TFWTrainRow.m in Sources */ = {isa = PBXBuildFile; fileRef = E78F48AA1B77C8A60023C8DB /* TFWTrainRow.m */; };
 		E7E544B41B766740006E3021 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544B31B766740006E3021 /* main.m */; };
 		E7E544C01B766740006E3021 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7E544BE1B766740006E3021 /* Main.storyboard */; };
 		E7E544C21B766740006E3021 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7E544C11B766740006E3021 /* Assets.xcassets */; };
@@ -19,8 +28,65 @@
 		E7E544E71B769B8A006E3021 /* UIColor+TFAlertColors.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544E61B769B8A006E3021 /* UIColor+TFAlertColors.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		E721DD6A1B77C76900AC04C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E7E544A71B76673F006E3021 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E721DD671B77C76900AC04C1;
+			remoteInfo = "TrainFaceWatchKitApp Extension";
+		};
+		E721DD791B77C76900AC04C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E7E544A71B76673F006E3021 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E721DD5B1B77C76900AC04C1;
+			remoteInfo = TrainFaceWatchKitApp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E721DD7F1B77C76900AC04C1 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E721DD691B77C76900AC04C1 /* TrainFaceWatchKitApp Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E721DD831B77C76900AC04C1 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				E721DD7B1B77C76900AC04C1 /* TrainFaceWatchKitApp.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		E721DD5C1B77C76900AC04C1 /* TrainFaceWatchKitApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrainFaceWatchKitApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E721DD5F1B77C76900AC04C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		E721DD611B77C76900AC04C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E721DD631B77C76900AC04C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E721DD681B77C76900AC04C1 /* TrainFaceWatchKitApp Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "TrainFaceWatchKitApp Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E721DD6D1B77C76900AC04C1 /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
+		E721DD6E1B77C76900AC04C1 /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
+		E721DD701B77C76900AC04C1 /* ExtensionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtensionDelegate.h; sourceTree = "<group>"; };
+		E721DD711B77C76900AC04C1 /* ExtensionDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtensionDelegate.m; sourceTree = "<group>"; };
+		E721DD731B77C76900AC04C1 /* ComplicationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComplicationController.h; sourceTree = "<group>"; };
+		E721DD741B77C76900AC04C1 /* ComplicationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ComplicationController.m; sourceTree = "<group>"; };
+		E721DD761B77C76900AC04C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E721DD781B77C76900AC04C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E73298901B77B3E0006E04A9 /* TrainFace.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TrainFace.entitlements; sourceTree = "<group>"; };
+		E78F48A91B77C8A60023C8DB /* TFWTrainRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFWTrainRow.h; sourceTree = "<group>"; };
+		E78F48AA1B77C8A60023C8DB /* TFWTrainRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFWTrainRow.m; sourceTree = "<group>"; };
 		E7E544AF1B766740006E3021 /* TrainFace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrainFace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7E544B31B766740006E3021 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E7E544BF1B766740006E3021 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -43,6 +109,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E721DD651B77C76900AC04C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E7E544AC1B766740006E3021 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -53,10 +126,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E721DD5D1B77C76900AC04C1 /* TrainFaceWatchKitApp */ = {
+			isa = PBXGroup;
+			children = (
+				E721DD5E1B77C76900AC04C1 /* Interface.storyboard */,
+				E721DD611B77C76900AC04C1 /* Assets.xcassets */,
+				E721DD631B77C76900AC04C1 /* Info.plist */,
+			);
+			path = TrainFaceWatchKitApp;
+			sourceTree = "<group>";
+		};
+		E721DD6C1B77C76900AC04C1 /* TrainFaceWatchKitApp Extension */ = {
+			isa = PBXGroup;
+			children = (
+				E721DD6D1B77C76900AC04C1 /* InterfaceController.h */,
+				E721DD6E1B77C76900AC04C1 /* InterfaceController.m */,
+				E721DD701B77C76900AC04C1 /* ExtensionDelegate.h */,
+				E721DD711B77C76900AC04C1 /* ExtensionDelegate.m */,
+				E721DD731B77C76900AC04C1 /* ComplicationController.h */,
+				E721DD741B77C76900AC04C1 /* ComplicationController.m */,
+				E78F48A91B77C8A60023C8DB /* TFWTrainRow.h */,
+				E78F48AA1B77C8A60023C8DB /* TFWTrainRow.m */,
+				E721DD761B77C76900AC04C1 /* Assets.xcassets */,
+				E721DD781B77C76900AC04C1 /* Info.plist */,
+			);
+			path = "TrainFaceWatchKitApp Extension";
+			sourceTree = "<group>";
+		};
 		E7E544A61B76673F006E3021 = {
 			isa = PBXGroup;
 			children = (
 				E7E544B11B766740006E3021 /* TrainFace */,
+				E721DD5D1B77C76900AC04C1 /* TrainFaceWatchKitApp */,
+				E721DD6C1B77C76900AC04C1 /* TrainFaceWatchKitApp Extension */,
 				E7E544B01B766740006E3021 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -65,6 +167,8 @@
 			isa = PBXGroup;
 			children = (
 				E7E544AF1B766740006E3021 /* TrainFace.app */,
+				E721DD5C1B77C76900AC04C1 /* TrainFaceWatchKitApp.app */,
+				E721DD681B77C76900AC04C1 /* TrainFaceWatchKitApp Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -146,6 +250,40 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		E721DD5B1B77C76900AC04C1 /* TrainFaceWatchKitApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E721DD801B77C76900AC04C1 /* Build configuration list for PBXNativeTarget "TrainFaceWatchKitApp" */;
+			buildPhases = (
+				E721DD5A1B77C76900AC04C1 /* Resources */,
+				E721DD7F1B77C76900AC04C1 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E721DD6B1B77C76900AC04C1 /* PBXTargetDependency */,
+			);
+			name = TrainFaceWatchKitApp;
+			productName = TrainFaceWatchKitApp;
+			productReference = E721DD5C1B77C76900AC04C1 /* TrainFaceWatchKitApp.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		E721DD671B77C76900AC04C1 /* TrainFaceWatchKitApp Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E721DD7C1B77C76900AC04C1 /* Build configuration list for PBXNativeTarget "TrainFaceWatchKitApp Extension" */;
+			buildPhases = (
+				E721DD641B77C76900AC04C1 /* Sources */,
+				E721DD651B77C76900AC04C1 /* Frameworks */,
+				E721DD661B77C76900AC04C1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TrainFaceWatchKitApp Extension";
+			productName = "TrainFaceWatchKitApp Extension";
+			productReference = E721DD681B77C76900AC04C1 /* TrainFaceWatchKitApp Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
 		E7E544AE1B766740006E3021 /* TrainFace */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E7E544C91B766740006E3021 /* Build configuration list for PBXNativeTarget "TrainFace" */;
@@ -153,10 +291,12 @@
 				E7E544AB1B766740006E3021 /* Sources */,
 				E7E544AC1B766740006E3021 /* Frameworks */,
 				E7E544AD1B766740006E3021 /* Resources */,
+				E721DD831B77C76900AC04C1 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E721DD7A1B77C76900AC04C1 /* PBXTargetDependency */,
 			);
 			name = TrainFace;
 			productName = TrainFace;
@@ -172,6 +312,13 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Panchromatic, LLC";
 				TargetAttributes = {
+					E721DD5B1B77C76900AC04C1 = {
+						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = 5459V76WQG;
+					};
+					E721DD671B77C76900AC04C1 = {
+						CreatedOnToolsVersion = 7.0;
+					};
 					E7E544AE1B766740006E3021 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 5459V76WQG;
@@ -197,11 +344,30 @@
 			projectRoot = "";
 			targets = (
 				E7E544AE1B766740006E3021 /* TrainFace */,
+				E721DD5B1B77C76900AC04C1 /* TrainFaceWatchKitApp */,
+				E721DD671B77C76900AC04C1 /* TrainFaceWatchKitApp Extension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E721DD5A1B77C76900AC04C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E721DD621B77C76900AC04C1 /* Assets.xcassets in Resources */,
+				E721DD601B77C76900AC04C1 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E721DD661B77C76900AC04C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E721DD771B77C76900AC04C1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E7E544AD1B766740006E3021 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -215,6 +381,17 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E721DD641B77C76900AC04C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E721DD751B77C76900AC04C1 /* ComplicationController.m in Sources */,
+				E721DD721B77C76900AC04C1 /* ExtensionDelegate.m in Sources */,
+				E721DD6F1B77C76900AC04C1 /* InterfaceController.m in Sources */,
+				E78F48AB1B77C8A60023C8DB /* TFWTrainRow.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E7E544AB1B766740006E3021 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -231,7 +408,28 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		E721DD6B1B77C76900AC04C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E721DD671B77C76900AC04C1 /* TrainFaceWatchKitApp Extension */;
+			targetProxy = E721DD6A1B77C76900AC04C1 /* PBXContainerItemProxy */;
+		};
+		E721DD7A1B77C76900AC04C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E721DD5B1B77C76900AC04C1 /* TrainFaceWatchKitApp */;
+			targetProxy = E721DD791B77C76900AC04C1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
+		E721DD5E1B77C76900AC04C1 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E721DD5F1B77C76900AC04C1 /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
 		E7E544BE1B766740006E3021 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -251,6 +449,70 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		E721DD7D1B77C76900AC04C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				INFOPLIST_FILE = "TrainFaceWatchKitApp Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = net.panchromatic.transitapp.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		E721DD7E1B77C76900AC04C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				INFOPLIST_FILE = "TrainFaceWatchKitApp Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = net.panchromatic.transitapp.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		E721DD811B77C76900AC04C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				IBSC_MODULE = TrainFaceWatchKitApp_Extension;
+				INFOPLIST_FILE = TrainFaceWatchKitApp/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = net.panchromatic.transitapp.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		E721DD821B77C76900AC04C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				IBSC_MODULE = TrainFaceWatchKitApp_Extension;
+				INFOPLIST_FILE = TrainFaceWatchKitApp/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = net.panchromatic.transitapp.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
 		E7E544C71B766740006E3021 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -358,6 +620,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E721DD7C1B77C76900AC04C1 /* Build configuration list for PBXNativeTarget "TrainFaceWatchKitApp Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E721DD7D1B77C76900AC04C1 /* Debug */,
+				E721DD7E1B77C76900AC04C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E721DD801B77C76900AC04C1 /* Build configuration list for PBXNativeTarget "TrainFaceWatchKitApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E721DD811B77C76900AC04C1 /* Debug */,
+				E721DD821B77C76900AC04C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E7E544AA1B76673F006E3021 /* Build configuration list for PBXProject "TrainFace" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
