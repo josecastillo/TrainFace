@@ -7,6 +7,7 @@
 //
 
 #import "ComplicationController.h"
+#import "ExtensionDelegate.h"
 
 #import "Constants.h"
 
@@ -162,6 +163,18 @@
 
 
 #pragma mark Update Scheduling
+
+- (void)requestedUpdateDidBegin {
+    ExtensionDelegate *delegate = (ExtensionDelegate *)[[WKExtension sharedExtension] delegate];
+    CLKComplicationServer *complicationServer = [CLKComplicationServer sharedInstance];
+    [delegate refresh:^(BOOL newData) {
+        if (newData) {
+            for (CLKComplication *complication in complicationServer.activeComplications) {
+                [complicationServer reloadTimelineForComplication:complication];
+            }
+        }
+    }];
+}
 
 - (void)getNextRequestedUpdateDateWithHandler:(void(^)(NSDate * __nullable updateDate))handler {
     // Request an update in an hour.

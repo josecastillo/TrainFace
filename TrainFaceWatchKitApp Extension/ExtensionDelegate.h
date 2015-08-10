@@ -9,6 +9,11 @@
 #import <WatchKit/WatchKit.h>
 #import <WatchConnectivity/WatchConnectivity.h>
 
+typedef void (^TFWRefreshCompletionHandler)(BOOL newData);
+
 @interface ExtensionDelegate : NSObject <WKExtensionDelegate, WCSessionDelegate>
 @property (nonatomic, strong) WCSession *session;
+
+- (void)refresh:(TFWRefreshCompletionHandler)completionHandler;
+
 @end

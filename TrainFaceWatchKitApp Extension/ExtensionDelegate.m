@@ -36,6 +36,10 @@
 }
 
 - (void)applicationDidBecomeActive {
+    [self refresh:nil];
+}
+
+- (void)refresh:(TFWRefreshCompletionHandler)completionHandler {
     [self.session sendMessage:@{@"command" : @"RequestServiceStatus"}
                  replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
                      NSDictionary *lines = replyMessage[@"lines"];
@@ -43,6 +47,10 @@
                      [[NSUserDefaults standardUserDefaults] setObject:lines forKey:kUserDefaultsKeyLines];
                      [[NSUserDefaults standardUserDefaults] setObject:serviceStatus forKey:kUserDefaultsKeyServiceStatus];
                      [[NSNotificationCenter defaultCenter] postNotificationName:@"TFWDataUpdate" object:self];
+                     if (completionHandler) {
+                         // TODO: call completion handler with NO if we don't need to update the status.
+                         completionHandler(YES);
+                     }
                  }
                  errorHandler:nil];
 }

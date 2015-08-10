@@ -31,6 +31,9 @@
     session.delegate = self;
     [session activateSession];
 
+    // Refresh subway status every half hour.
+    [application setMinimumBackgroundFetchInterval:30*60];
+
     return YES;
 }
 
@@ -83,5 +86,20 @@
     }
 }
 
+-(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSString *oldTimestamp = [[TFLiveDataSource defaultSource] status][kLiveDataSourceKeyTimestamp];
+    [[TFLiveDataSource defaultSource] refresh:^(NSError *error) {
+        if (error) {
+            completionHandler(UIBackgroundFetchResultFailed);
+            return;
+        }
+        NSString *newTimestamp = [[TFLiveDataSource defaultSource] status][kLiveDataSourceKeyTimestamp];
+        if ([newTimestamp isEqualToString:oldTimestamp]) {
+            completionHandler(UIBackgroundFetchResultNoData);
+        } else {
+            completionHandler(UIBackgroundFetchResultNewData);
+        }
+    }];
+}
 
 @end
