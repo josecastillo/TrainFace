@@ -13,7 +13,8 @@
 #import "Constants.h"
 
 @interface InterfaceController()
-
+@property (nonatomic, strong) NSArray *lines;
+@property (nonatomic, strong) NSDictionary *systemStatus;
 @end
 
 
@@ -21,19 +22,19 @@
 
 - (void)refreshTable:(NSNotification *)notification {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray *lines = [defaults arrayForKey:kUserDefaultsKeyLines];
+    self.lines = [defaults arrayForKey:kUserDefaultsKeyLines];
     NSURL *containerUrl = [[[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] firstObject];
     
-    NSDictionary *systemStatus = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kUserDefaultsKeyServiceStatus];
-    if (systemStatus) {
-        [self.tableView setNumberOfRows:lines.count withRowType:kCellIdentifierDefault];
+    self.systemStatus = [[NSUserDefaults standardUserDefaults] dictionaryForKey:kUserDefaultsKeyServiceStatus];
+    if (self.systemStatus) {
+        [self.tableView setNumberOfRows:self.lines.count withRowType:kCellIdentifierDefault];
     } else {
         [self.tableView setNumberOfRows:0 withRowType:kCellIdentifierDefault];
     }
 
     for (int i = 0 ; i < self.tableView.numberOfRows ; i++) {
-        NSString *line = lines[i];
-        NSDictionary *lineStatus = systemStatus[kLiveDataSourceKeyLines][line];
+        NSString *line = self.lines[i];
+        NSDictionary *lineStatus = self.systemStatus[kLiveDataSourceKeyLines][line];
         TFWTrainRow *row = [self.tableView rowControllerAtIndex:i];
         row.textLabel.text = lineStatus[kLiveDataSourceKeyStatus];
         row.textLabel.textColor = [UIColor colorForAlertLevel:[lineStatus[kLiveDataSourceKeyAlertLevel] integerValue]];
@@ -57,6 +58,11 @@
     // This method is called when watch view controller is no longer visible
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"TFWDataUpdate" object:nil];
     [super didDeactivate];
+}
+
+- (id)contextForSegueWithIdentifier:(NSString *)segueIdentifier inTable:(WKInterfaceTable *)table rowIndex:(NSInteger)rowIndex {
+    NSString *lineName = self.lines[rowIndex];
+    return self.systemStatus[kLiveDataSourceKeyLines][lineName];
 }
 
 @end

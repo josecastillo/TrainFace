@@ -24,6 +24,7 @@
                                     <connections>
                                         <outlet property="imageView" destination="Awh-zb-CeA" id="L4g-4D-hl5"/>
                                         <outlet property="textLabel" destination="dFA-vt-Kp2" id="xaf-Yu-ivl"/>
+                                        <segue destination="WlO-Ly-Dtg" kind="push" id="6pO-3a-jeZ"/>
                                     </connections>
                                 </tableRow>
                             </items>
@@ -34,6 +35,30 @@
                     </connections>
                 </controller>
             </objects>
+        </scene>
+        <!--Detail Interface Controller-->
+        <scene sceneID="rSm-x2-vWd">
+            <objects>
+                <controller hidesWhenLoading="NO" id="WlO-Ly-Dtg" customClass="DetailInterfaceController">
+                    <items>
+                        <group width="1" alignment="left" id="chg-7h-9FO">
+                            <items>
+                                <imageView width="32" height="32" alignment="left" verticalAlignment="center" id="v1K-k5-oyh"/>
+                                <label alignment="left" verticalAlignment="center" text="Label" numberOfLines="2" id="30U-9n-B7I">
+                                    <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                </label>
+                            </items>
+                        </group>
+                        <label alignment="left" text="Label" numberOfLines="0" id="OQ0-lP-fhZ"/>
+                    </items>
+                    <connections>
+                        <outlet property="detailLabel" destination="OQ0-lP-fhZ" id="8Bh-7v-TBD"/>
+                        <outlet property="imageView" destination="v1K-k5-oyh" id="JWk-U1-ckA"/>
+                        <outlet property="statusLabel" destination="30U-9n-B7I" id="Kcc-DI-eUi"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="474" y="205"/>
         </scene>
     </scenes>
 </document>

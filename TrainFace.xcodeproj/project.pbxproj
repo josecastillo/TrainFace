@@ -16,6 +16,7 @@
 		E721DD751B77C76900AC04C1 /* ComplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E721DD741B77C76900AC04C1 /* ComplicationController.m */; };
 		E721DD771B77C76900AC04C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E721DD761B77C76900AC04C1 /* Assets.xcassets */; };
 		E721DD7B1B77C76900AC04C1 /* TrainFaceWatchKitApp.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = E721DD5C1B77C76900AC04C1 /* TrainFaceWatchKitApp.app */; };
+		E78576221B78294D00E7D338 /* DetailInterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = E78576211B78294D00E7D338 /* DetailInterfaceController.m */; };
 		E78F48AB1B77C8A60023C8DB /* TFWTrainRow.m in Sources */ = {isa = PBXBuildFile; fileRef = E78F48AA1B77C8A60023C8DB /* TFWTrainRow.m */; };
 		E7E544B41B766740006E3021 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E7E544B31B766740006E3021 /* main.m */; };
 		E7E544C01B766740006E3021 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7E544BE1B766740006E3021 /* Main.storyboard */; };
@@ -85,6 +86,8 @@
 		E721DD741B77C76900AC04C1 /* ComplicationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ComplicationController.m; sourceTree = "<group>"; };
 		E721DD761B77C76900AC04C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E721DD781B77C76900AC04C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E78576201B78294D00E7D338 /* DetailInterfaceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailInterfaceController.h; sourceTree = "<group>"; };
+		E78576211B78294D00E7D338 /* DetailInterfaceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailInterfaceController.m; sourceTree = "<group>"; };
 		E78F48A91B77C8A60023C8DB /* TFWTrainRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFWTrainRow.h; sourceTree = "<group>"; };
 		E78F48AA1B77C8A60023C8DB /* TFWTrainRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFWTrainRow.m; sourceTree = "<group>"; };
 		E7E544AF1B766740006E3021 /* TrainFace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrainFace.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,6 +144,8 @@
 			children = (
 				E721DD6D1B77C76900AC04C1 /* InterfaceController.h */,
 				E721DD6E1B77C76900AC04C1 /* InterfaceController.m */,
+				E78576201B78294D00E7D338 /* DetailInterfaceController.h */,
+				E78576211B78294D00E7D338 /* DetailInterfaceController.m */,
 				E721DD701B77C76900AC04C1 /* ExtensionDelegate.h */,
 				E721DD711B77C76900AC04C1 /* ExtensionDelegate.m */,
 				E721DD731B77C76900AC04C1 /* ComplicationController.h */,
@@ -399,6 +404,7 @@
 				E721DD751B77C76900AC04C1 /* ComplicationController.m in Sources */,
 				E721DD721B77C76900AC04C1 /* ExtensionDelegate.m in Sources */,
 				E721DD6F1B77C76900AC04C1 /* InterfaceController.m in Sources */,
+				E78576221B78294D00E7D338 /* DetailInterfaceController.m in Sources */,
 				E78F48AB1B77C8A60023C8DB /* TFWTrainRow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
