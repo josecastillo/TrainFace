@@ -41,6 +41,20 @@
         NSURL *imageUrl = [[containerUrl URLByAppendingPathComponent:line] URLByAppendingPathExtension:@"png"];
         [row.imageView setImageData:[NSData dataWithContentsOfURL:imageUrl]];
     }
+    
+    if (self.systemStatus) {
+        NSDateFormatter *inputDateFormatter = [[NSDateFormatter alloc] init];
+        inputDateFormatter.dateFormat = @"M/d/yyyy h:mm:ss a";
+        NSDate *timestamp = [inputDateFormatter dateFromString:self.systemStatus[kLiveDataSourceKeyTimestamp]];
+        
+        NSDateFormatter *outputDateFormatter = [[NSDateFormatter alloc] init];
+        outputDateFormatter.dateStyle = NSDateFormatterNoStyle;
+        outputDateFormatter.timeStyle = NSDateFormatterShortStyle;
+        
+        [self setTitle:[NSString stringWithFormat:@"@ %@", [outputDateFormatter stringFromDate:timestamp]]];
+    } else {
+        [self setTitle:@"TrainFace"];
+    }
 }
 
 - (void)awakeWithContext:(id)context {

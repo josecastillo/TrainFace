@@ -7,7 +7,6 @@
 //
 
 #import "ComplicationController.h"
-#import "ExtensionDelegate.h"
 
 #import "Constants.h"
 
@@ -20,9 +19,9 @@
 #pragma mark - Complication-specific logic
 
 - (CLKComplicationTimelineEntry *)modularLargeEntryForStatus:(NSDictionary *)serviceStatus withMessages:(NSCountedSet *)statusMessages timestamp:(NSDate *)timestamp {
+    CLKComplicationTemplateModularLargeTable *template = [[CLKComplicationTemplateModularLargeTable alloc] init];
     // Simplest case: If there's only one entry, and it's "Good Service", display "good service" indicator.
     if (([statusMessages count] == 1) && [[statusMessages anyObject] isEqualToString:@"GOOD SERVICE"]) {
-        CLKComplicationTemplateModularLargeTable *template = [[CLKComplicationTemplateModularLargeTable alloc] init];
         template.headerTextProvider = [CLKSimpleTextProvider textProviderWithText:@"Service Status"];
         template.row1Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:@"All lines"];
         template.row1Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:@"OK"];
@@ -54,63 +53,179 @@
                                           @"SUSPENDED" : @"Suspend",
                                           @"SERVICE CHANGE" : @"Change"};
 
-    // If at this juncture, we only have one type of disruption, we can use the same template (one disruption, updated date).
-    if ([sortedStatusMessages count] == 1) {
-        NSString *statusMessage = [sortedStatusMessages firstObject];
-        NSDictionary *lines = serviceStatus[kLiveDataSourceKeyLines];
-        NSMutableString *trainsAffected = [NSMutableString string];
+    NSDictionary *lines = serviceStatus[kLiveDataSourceKeyLines];
+    
+    NSMutableArray *trainsAffectedList = [NSMutableArray array];
+    for (NSString *statusMessage in sortedStatusMessages) {
+        NSMutableArray *trainsAffected = [NSMutableArray array];
         for (NSString *lineName in [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyLines]) {
             if ([lines[lineName][kLiveDataSourceKeyStatus] isEqualToString:statusMessage]) {
-                [trainsAffected appendString:lineName];
+                [trainsAffected addObject:lineName];
             }
         }
-        CLKComplicationTemplateModularLargeTable *template = [[CLKComplicationTemplateModularLargeTable alloc] init];
-        template.headerTextProvider = [CLKSimpleTextProvider textProviderWithText:@"Service Status"];
-        template.row1Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:trainsAffected];
-        template.row1Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:shortStatusMessages[statusMessage]];
+        [trainsAffectedList addObject:trainsAffected];
+    }
+    
+    // Row 1 will always be some affected trains.
+    NSString *longTrainsAffected;
+    NSString *shortTrainsAffected;
+    NSString *accessibleTrainsAffected;
+    NSString *statusMessage;
+    NSString *accessibleStatusMessage;
+    
+    static NSUInteger maxLength = 8;
+    
+    longTrainsAffected = [trainsAffectedList[0] componentsJoinedByString:@""];
+    if ([longTrainsAffected length] > maxLength) {
+        shortTrainsAffected = [[longTrainsAffected substringToIndex:maxLength - 1] stringByAppendingString:@"+"];
+    } else {
+        shortTrainsAffected = longTrainsAffected;
+    }
+    accessibleTrainsAffected = [[trainsAffectedList[0] componentsJoinedByString:@", "] stringByAppendingString:@" trains"];
+    statusMessage = shortStatusMessages[sortedStatusMessages[0]];
+    accessibleStatusMessage = sortedStatusMessages[0];
+    
+    template.headerTextProvider = [CLKSimpleTextProvider textProviderWithText:@"Service Status"];
+    template.row1Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:shortTrainsAffected shortText:nil accessibilityLabel:accessibleTrainsAffected];
+    template.row1Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:statusMessage];
+    
+    if ([trainsAffectedList count] == 1) {
+        // If we only have one disruption line, make line 3 the last updated timestamp.
         template.row2Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:@"Updated"];
         template.row2Column2TextProvider = [CLKTimeTextProvider textProviderWithDate:timestamp];
-
-        return [CLKComplicationTimelineEntry entryWithDate:[NSDate date] complicationTemplate:template];
-    }
-
-    // If we have two or more status messages, ditch the title line.
-    if ([sortedStatusMessages count] >= 2) {
-        NSDictionary *lines = serviceStatus[kLiveDataSourceKeyLines];
-        NSMutableArray *trainsAffectedList = [NSMutableArray array];
-        for (NSString *statusMessage in sortedStatusMessages) {
-            NSMutableString *trainsAffected = [NSMutableString string];
-            for (NSString *lineName in [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyLines]) {
-                if ([lines[lineName][kLiveDataSourceKeyStatus] isEqualToString:statusMessage]) {
-                    [trainsAffected appendString:lineName];
-                }
-            }
-            [trainsAffectedList addObject:trainsAffected];
-        }
-
-        CLKComplicationTemplateModularLargeColumns *template = [[CLKComplicationTemplateModularLargeColumns alloc] init];
-        template.row1Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:trainsAffectedList[0]];
-        template.row1Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:shortStatusMessages[sortedStatusMessages[0]]];
-        template.row2Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:trainsAffectedList[1]];
-        template.row2Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:shortStatusMessages[sortedStatusMessages[1]]];
-
-        if ([sortedStatusMessages count] == 2) {
-            // If we have exactly two disruptions, line 3 is the "updated" line.
-            template.row3Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:@"Updated"];
-            template.row3Column2TextProvider = [CLKTimeTextProvider textProviderWithDate:timestamp];
-        } else if ([sortedStatusMessages count] == 3) {
-            // If we have exactly three disruptions, line 3 is the third one.
-            template.row3Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:trainsAffectedList[2]];
-            template.row3Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:shortStatusMessages[sortedStatusMessages[3]]];
+    } else if ([trainsAffectedList count] == 2) {
+        // If we only have two disruption lines, make line 3 the last updated timestamp.
+        longTrainsAffected = [trainsAffectedList[1] componentsJoinedByString:@""];
+        if ([longTrainsAffected length] > maxLength) {
+            shortTrainsAffected = [[longTrainsAffected substringToIndex:maxLength - 1] stringByAppendingString:@"+"];
         } else {
-            // If the system is well and truly messed, add a plus sign to the lines and indicate multiple issues.
-            template.row3Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:[trainsAffectedList[2] stringByAppendingString:@"+"]];
-            template.row3Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:@"Issues"];
+            shortTrainsAffected = longTrainsAffected;
         }
+        accessibleTrainsAffected = [[trainsAffectedList[1] componentsJoinedByString:@", "] stringByAppendingString:@" trains"];
+        statusMessage = shortStatusMessages[sortedStatusMessages[1]];
+        accessibleStatusMessage = sortedStatusMessages[1];
+        
+        template.row2Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:shortTrainsAffected shortText:nil accessibilityLabel:accessibleTrainsAffected];
+        template.row2Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:statusMessage shortText:nil accessibilityLabel:accessibleStatusMessage];
+    } else {
+        // There are three or more lines affected; lump them all and say "Multiple Issues".
+        NSMutableArray *remainingLines = [NSMutableArray array];
+        for (NSArray *array in trainsAffectedList) {
+            [remainingLines addObjectsFromArray:array];
+        }
+        
+        // Sorted so the lines we care about are first.
+        NSMutableArray *sortedTrainsAffected = [NSMutableArray array];
+        for (NSString *lineName in [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyLines]) {
+            if ([remainingLines containsObject:lineName]) {
+                [sortedTrainsAffected addObject:lineName];
+            }
+        }
+        
+        // From here it's like we did before.
+        longTrainsAffected = [sortedTrainsAffected componentsJoinedByString:@""];
+        if ([longTrainsAffected length] > maxLength) {
+            shortTrainsAffected = [[longTrainsAffected substringToIndex:maxLength - 1] stringByAppendingString:@"+"];
+        } else {
+            shortTrainsAffected = longTrainsAffected;
+        }
+        accessibleTrainsAffected = [[sortedTrainsAffected componentsJoinedByString:@", "] stringByAppendingString:@" trains"];
+        statusMessage = @"Issues";
+        accessibleStatusMessage = @"Multiple Issues";
 
-        return [CLKComplicationTimelineEntry entryWithDate:[NSDate date] complicationTemplate:template];
+        template.row2Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:shortTrainsAffected shortText:nil accessibilityLabel:accessibleTrainsAffected];
+        template.row2Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:statusMessage shortText:nil accessibilityLabel:accessibleStatusMessage];
     }
-    return nil;
+    
+    return [CLKComplicationTimelineEntry entryWithDate:[NSDate date] complicationTemplate:template];
+}
+
+- (CLKImageProvider *)imageProviderForStatus:(NSDictionary *)serviceStatus withMessages:(NSCountedSet *)statusMessages timestamp:(NSDate *)timestamp complicationType:(CLKComplicationFamily)family {
+    CLKImageProvider *retVal = nil;
+    switch (family) {
+        case CLKComplicationFamilyModularSmall:
+            retVal = [CLKImageProvider imageProviderWithOnePieceImage:[UIImage imageNamed:@"Complication/Modular"]];
+            break;
+        case CLKComplicationFamilyUtilitarianSmall:
+            retVal = [CLKImageProvider imageProviderWithOnePieceImage:[UIImage imageNamed:@"Complication/Utilitarian"]];
+            break;
+        case CLKComplicationFamilyCircularSmall:
+            retVal = [CLKImageProvider imageProviderWithOnePieceImage:[UIImage imageNamed:@"Complication/Circular"]];
+            break;
+        default:
+            return nil;
+    }
+    
+    retVal.accessibilityLabel = @"Subway status";
+    
+    return retVal;
+}
+
+- (CLKTextProvider *)textProviderForStatus:(NSDictionary *)serviceStatus withMessages:(NSCountedSet *)statusMessages timestamp:(NSDate *)timestamp complicationType:(CLKComplicationFamily)family {
+    // If there's only one entry, and it's "Good Service", tell them everything's OK.
+    if (([statusMessages count] == 1) && [[statusMessages anyObject] isEqualToString:@"GOOD SERVICE"]) {
+        return [CLKSimpleTextProvider textProviderWithText:@"OK"];
+    }
+    
+    NSMutableArray *trainsAffected = [NSMutableArray array];
+    NSDictionary *lines = serviceStatus[kLiveDataSourceKeyLines];
+    
+    // Otherwise, we just want to show all affected lines in the user's defined order.
+    for (NSString *lineName in [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyLines]) {
+        if (![lines[lineName][kLiveDataSourceKeyStatus] isEqualToString:@"GOOD SERVICE"]) {
+            [trainsAffected addObject:lineName];
+        }
+    }
+    
+    NSUInteger maxLength;
+    switch (family) {
+        case CLKComplicationFamilyModularSmall:
+            maxLength = 6;
+            break;
+        case CLKComplicationFamilyUtilitarianSmall:
+            maxLength = 7;
+            break;
+        case CLKComplicationFamilyCircularSmall:
+            maxLength = 3;
+            break;
+        default:
+            maxLength = 5;
+    }
+    
+    NSString *longTrainsAffected = [trainsAffected componentsJoinedByString:@""];
+    NSString *shortTrainsAffected;
+    if ([longTrainsAffected length] > maxLength) {
+        shortTrainsAffected = [[longTrainsAffected substringToIndex:maxLength - 1] stringByAppendingString:@"+"];
+    } else {
+        shortTrainsAffected = longTrainsAffected;
+    }
+    NSString *accessibleTrainsAffected = [NSString stringWithFormat:@"Issues on %@ trains.", [trainsAffected componentsJoinedByString:@", "]];
+
+    return [CLKSimpleTextProvider textProviderWithText:shortTrainsAffected shortText:nil accessibilityLabel:accessibleTrainsAffected];
+}
+
+- (CLKComplicationTimelineEntry *)modularSmallEntryForStatus:(NSDictionary *)serviceStatus withMessages:(NSCountedSet *)statusMessages timestamp:(NSDate *)timestamp {
+    CLKComplicationTemplateModularSmallStackImage *template = [[CLKComplicationTemplateModularSmallStackImage alloc] init];
+    template.line1ImageProvider = [self imageProviderForStatus:serviceStatus withMessages:statusMessages timestamp:timestamp complicationType:CLKComplicationFamilyModularSmall];
+    template.line2TextProvider = [self textProviderForStatus:serviceStatus withMessages:statusMessages timestamp:timestamp complicationType:CLKComplicationFamilyModularSmall];
+    
+    return [CLKComplicationTimelineEntry entryWithDate:[NSDate date] complicationTemplate:template];
+}
+
+- (CLKComplicationTimelineEntry *)circularSmallEntryForStatus:(NSDictionary *)serviceStatus withMessages:(NSCountedSet *)statusMessages timestamp:(NSDate *)timestamp {
+    CLKComplicationTemplateCircularSmallStackImage *template = [[CLKComplicationTemplateCircularSmallStackImage alloc] init];
+    template.line1ImageProvider = [self imageProviderForStatus:serviceStatus withMessages:statusMessages timestamp:timestamp complicationType:CLKComplicationFamilyCircularSmall];
+    template.line2TextProvider = [self textProviderForStatus:serviceStatus withMessages:statusMessages timestamp:timestamp complicationType:CLKComplicationFamilyCircularSmall];
+    
+    return [CLKComplicationTimelineEntry entryWithDate:[NSDate date] complicationTemplate:template];
+}
+
+- (CLKComplicationTimelineEntry *)utilitarianSmallEntryForStatus:(NSDictionary *)serviceStatus withMessages:(NSCountedSet *)statusMessages timestamp:(NSDate *)timestamp {
+    CLKComplicationTemplateUtilitarianSmallFlat *template = [[CLKComplicationTemplateUtilitarianSmallFlat alloc] init];
+    template.imageProvider = [self imageProviderForStatus:serviceStatus withMessages:statusMessages timestamp:timestamp complicationType:CLKComplicationFamilyUtilitarianSmall];
+    template.textProvider = [self textProviderForStatus:serviceStatus withMessages:statusMessages timestamp:timestamp complicationType:CLKComplicationFamilyUtilitarianSmall];
+    
+    return [CLKComplicationTimelineEntry entryWithDate:[NSDate date] complicationTemplate:template];
 }
 
 #pragma mark - Timeline Configuration
@@ -154,9 +269,21 @@
         case CLKComplicationFamilyModularLarge: {
             handler([self modularLargeEntryForStatus:serviceStatus withMessages:statusMessages timestamp:timestamp]);
             return;
+        }
+        case CLKComplicationFamilyModularSmall: {
+            handler([self modularSmallEntryForStatus:serviceStatus withMessages:statusMessages timestamp:timestamp]);
+            return;
+        }
+        case CLKComplicationFamilyCircularSmall: {
+            handler([self circularSmallEntryForStatus:serviceStatus withMessages:statusMessages timestamp:timestamp]);
+            return;
+        }
+        case CLKComplicationFamilyUtilitarianSmall: {
+            handler([self utilitarianSmallEntryForStatus:serviceStatus withMessages:statusMessages timestamp:timestamp]);
+            return;
+        }
         default:
             break;
-        }
     }
     handler(nil);
 }
@@ -165,15 +292,10 @@
 #pragma mark Update Scheduling
 
 - (void)requestedUpdateDidBegin {
-    ExtensionDelegate *delegate = (ExtensionDelegate *)[[WKExtension sharedExtension] delegate];
     CLKComplicationServer *complicationServer = [CLKComplicationServer sharedInstance];
-    [delegate refresh:^(BOOL newData) {
-        if (newData) {
-            for (CLKComplication *complication in complicationServer.activeComplications) {
-                [complicationServer reloadTimelineForComplication:complication];
-            }
-        }
-    }];
+    for (CLKComplication *complication in complicationServer.activeComplications) {
+        [complicationServer reloadTimelineForComplication:complication];
+    }
 }
 
 - (void)getNextRequestedUpdateDateWithHandler:(void(^)(NSDate * __nullable updateDate))handler {
@@ -190,9 +312,33 @@
             CLKComplicationTemplateModularLargeTable *template = [[CLKComplicationTemplateModularLargeTable alloc] init];
             template.headerTextProvider = [CLKSimpleTextProvider textProviderWithText:@"Service Status"];
             template.row1Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:@"All lines"];
-            template.row1Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:@"OK"];
+            template.row1Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:@"No Data"];
             template.row2Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:@"Updated"];
-            template.row2Column2TextProvider = [CLKTimeTextProvider textProviderWithDate:[NSDate date]];
+            template.row2Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:@"Never"];
+            handler(template);
+        }
+            break;
+        case CLKComplicationFamilyModularSmall:
+        {
+            CLKComplicationTemplateModularSmallStackImage *template = [[CLKComplicationTemplateModularSmallStackImage alloc] init];
+            template.line1ImageProvider = [CLKImageProvider imageProviderWithOnePieceImage:[UIImage imageNamed:@"Complication/Modular"]];
+            template.line2TextProvider = [CLKSimpleTextProvider textProviderWithText:@"---"];
+            handler(template);
+        }
+            break;
+        case CLKComplicationFamilyUtilitarianSmall:
+        {
+            CLKComplicationTemplateUtilitarianSmallFlat *template = [[CLKComplicationTemplateUtilitarianSmallFlat alloc] init];
+            template.imageProvider = [CLKImageProvider imageProviderWithOnePieceImage:[UIImage imageNamed:@"Complication/Utilitarian"]];
+            template.textProvider = [CLKSimpleTextProvider textProviderWithText:@"-"];
+            handler(template);
+        }
+            break;
+        case CLKComplicationFamilyCircularSmall:
+        {
+            CLKComplicationTemplateCircularSmallStackImage *template = [[CLKComplicationTemplateCircularSmallStackImage alloc] init];
+            template.line1ImageProvider = [CLKImageProvider imageProviderWithOnePieceImage:[UIImage imageNamed:@"Complication/Circular"]];
+            template.line2TextProvider = [CLKSimpleTextProvider textProviderWithText:@"--"];
             handler(template);
         }
             break;
