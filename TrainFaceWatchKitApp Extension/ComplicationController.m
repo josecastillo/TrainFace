@@ -110,7 +110,8 @@
     } else {
         // There are three or more lines affected; lump them all and say "Multiple Issues".
         NSMutableArray *remainingLines = [NSMutableArray array];
-        for (NSArray *array in trainsAffectedList) {
+        for (int i = 1 ; i < trainsAffectedList.count ; i++) {
+            NSArray *array = trainsAffectedList[i];
             [remainingLines addObjectsFromArray:array];
         }
         
