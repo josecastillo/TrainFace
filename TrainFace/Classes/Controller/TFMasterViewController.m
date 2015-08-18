@@ -40,6 +40,11 @@
                           ];
     self.timestampLabel = timestampLabel;
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reloadUI)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:[UIApplication sharedApplication]];
+
     [self refresh:self.navigationItem.rightBarButtonItem];
 }
 
@@ -47,12 +52,23 @@
     self.clearsSelectionOnViewWillAppear = YES;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.lines = [[defaults arrayForKey:kUserDefaultsKeyLines] mutableCopy];
+    [self reloadUI];
     [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)reloadUI {
+    self.systemStatus = [[TFLiveDataSource defaultSource] status];
+    if (self.systemStatus) {
+        self.timestampLabel.text = [NSString stringWithFormat:@"Updated: %@", self.systemStatus[kLiveDataSourceKeyTimestamp]];
+    } else {
+        self.timestampLabel.text = @"No data! Try refreshing.";
+    }
+    [self.tableView reloadData];
 }
 
 - (void)refresh:(UIBarButtonItem *)sender {
@@ -71,13 +87,8 @@
                                                     }]];
             [self presentViewController:alert animated:YES completion:nil];
         }
-        self.systemStatus = [[TFLiveDataSource defaultSource] status];
-        if (self.systemStatus) {
-            self.timestampLabel.text = [NSString stringWithFormat:@"Updated: %@", self.systemStatus[kLiveDataSourceKeyTimestamp]];
-        } else {
-            self.timestampLabel.text = @"No data! Try refreshing.";
-        }
-        [self.tableView reloadData];
+
+        [self reloadUI];
     }];
 }
 

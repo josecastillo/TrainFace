@@ -7,8 +7,8 @@
 //
 
 #import "ExtensionDelegate.h"
-
 #import "Constants.h"
+#import <ClockKit/ClockKit.h>
 
 @implementation ExtensionDelegate
 
@@ -17,12 +17,14 @@
     session.delegate = self;
     [session activateSession];
     self.session = session;
+}
 
+- (void)applicationDidBecomeActive {
     // If we don't have line images, fetch them from the host app now.
     NSURL *containerUrl = [[[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] firstObject];
     NSURL *testUrl = [[containerUrl URLByAppendingPathComponent:@"R"] URLByAppendingPathExtension:@"png"];
     if (![[NSFileManager defaultManager] fileExistsAtPath:[testUrl path]]) {
-        [session sendMessage:@{@"command" : @"RequestLineImages"}
+        [self.session sendMessage:@{@"command" : @"RequestLineImages"}
                 replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
                     NSDictionary *files = replyMessage[@"images"];
                     for (NSString *filename in files) {
@@ -35,24 +37,15 @@
     }
 }
 
-- (void)applicationDidBecomeActive {
-    [self refresh:nil];
-}
-
-- (void)refresh:(TFWRefreshCompletionHandler)completionHandler {
-    [self.session sendMessage:@{@"command" : @"RequestServiceStatus"}
-                 replyHandler:^(NSDictionary<NSString *,id> * _Nonnull replyMessage) {
-                     NSDictionary *lines = replyMessage[@"lines"];
-                     NSDictionary *serviceStatus = replyMessage[@"status"];
-                     [[NSUserDefaults standardUserDefaults] setObject:lines forKey:kUserDefaultsKeyLines];
-                     [[NSUserDefaults standardUserDefaults] setObject:serviceStatus forKey:kUserDefaultsKeyServiceStatus];
-                     [[NSNotificationCenter defaultCenter] postNotificationName:@"TFWDataUpdate" object:self];
-                     if (completionHandler) {
-                         // TODO: call completion handler with NO if we don't need to update the status.
-                         completionHandler(YES);
-                     }
-                 }
-                 errorHandler:nil];
+- (void)session:(WCSession *)session didReceiveApplicationContext:(nonnull NSDictionary<NSString *,id> *)applicationContext {
+    NSDictionary *lines = applicationContext[kUserDefaultsKeyLines];
+    NSDictionary *serviceStatus = applicationContext[kUserDefaultsKeyServiceStatus];
+    [[NSUserDefaults standardUserDefaults] setObject:lines forKey:kUserDefaultsKeyLines];
+    [[NSUserDefaults standardUserDefaults] setObject:serviceStatus forKey:kUserDefaultsKeyServiceStatus];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"TFWDataUpdate" object:self];
+    for (CLKComplication *complication in [[CLKComplicationServer sharedInstance] activeComplications]) {
+        [[CLKComplicationServer sharedInstance] reloadTimelineForComplication:complication];
+    }
 }
 
 - (void)applicationWillResignActive {

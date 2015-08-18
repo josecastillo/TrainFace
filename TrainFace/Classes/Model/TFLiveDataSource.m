@@ -8,6 +8,7 @@
 
 #import "TFLiveDataSource.h"
 #import "Constants.h"
+#import <WatchConnectivity/WatchConnectivity.h>
 
 @interface TFLiveDataSource ()
 @property (nonatomic, strong) NSDictionary *systemStatus;
@@ -22,6 +23,36 @@ static TFLiveDataSource *instance;
         instance = [self new];
     }
     return instance;
+}
+
+- (void)updateWatchInfo {
+    WCSession *session = [WCSession defaultSession];
+    NSArray *transfers = [session outstandingUserInfoTransfers];
+    for (WCSessionUserInfoTransfer *transfer in transfers) {
+        [transfer cancel];
+    }
+
+    // For the watch, strip out unnecessary info
+    NSDictionary *status = [[TFLiveDataSource defaultSource] status];
+    NSMutableDictionary *shortStatus = [NSMutableDictionary dictionary];
+    shortStatus[kLiveDataSourceKeyTimestamp] = status[kLiveDataSourceKeyTimestamp];
+    shortStatus[kLiveDataSourceKeyLines] = [NSMutableDictionary dictionary];
+    for (NSString *key in status[kLiveDataSourceKeyLines]) {
+        NSMutableDictionary *item = [status[kLiveDataSourceKeyLines][key] mutableCopy];
+        [item removeObjectForKey:kLiveDataSourceKeyDetail];
+        if ([item[kLiveDataSourceKeyDetailShort] isEqualToString:@""]) {
+            [item removeObjectForKey:kLiveDataSourceKeyDetailShort];
+        }
+        shortStatus[kLiveDataSourceKeyLines][key] = item;
+    }
+
+    NSDictionary *applicationContext =
+    @{
+      kUserDefaultsKeyServiceStatus : shortStatus,
+      kUserDefaultsKeyLines : [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyLines]
+      };
+    [session updateApplicationContext:applicationContext
+                                error:nil];
 }
 
 - (void)refresh:(TFLiveDataSourceCompletionHandler)completionHandler {
@@ -53,6 +84,9 @@ static TFLiveDataSource *instance;
                     systemStatus[kLiveDataSourceKeyTimestamp] = result[kLiveDataSourceKeyTimestamp];
                     systemStatus[kLiveDataSourceKeyLines] = [NSDictionary dictionaryWithDictionary:lines];
                     self.systemStatus = systemStatus;
+
+                    [self updateWatchInfo];
+
                     dispatch_sync(dispatch_get_main_queue(), ^{
                         completionHandler(nil);
                     });

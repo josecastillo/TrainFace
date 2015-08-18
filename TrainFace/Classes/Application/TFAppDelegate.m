@@ -78,11 +78,6 @@
             response[filename] = pngData;
         }
         replyHandler(@{@"images" : response});
-    } else if ([command isEqualToString:@"RequestServiceStatus"]) {
-        [[TFLiveDataSource defaultSource] refresh:^(NSError *error) {
-            // TODO: Error Handling. For now, pass along whatever we get back even if it's stale data.
-            replyHandler(@{@"status" : [[TFLiveDataSource defaultSource] status], @"lines" : [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyLines]});
-        }];
     }
 }
 
