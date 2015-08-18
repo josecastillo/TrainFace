@@ -31,14 +31,13 @@
     session.delegate = self;
     [session activateSession];
 
-    // Refresh subway status every half hour.
-    [application setMinimumBackgroundFetchInterval:30*60];
-
     return YES;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    // At minimum, refresh subway status every 15 minutes.
+    [application setMinimumBackgroundFetchInterval:15*60];
+
     return YES;
 }
 
