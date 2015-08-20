@@ -70,8 +70,8 @@
     NSString *longTrainsAffected;
     NSString *shortTrainsAffected;
     NSString *accessibleTrainsAffected;
-    NSString *statusMessage;
-    NSString *accessibleStatusMessage;
+    NSString *shortStatusMessage;
+    NSString *longStatusMessage;
     
     static NSUInteger maxLength = 8;
     
@@ -82,62 +82,67 @@
         shortTrainsAffected = longTrainsAffected;
     }
     accessibleTrainsAffected = [[trainsAffectedList[0] componentsJoinedByString:@", "] stringByAppendingString:@" trains"];
-    statusMessage = shortStatusMessages[sortedStatusMessages[0]];
-    accessibleStatusMessage = sortedStatusMessages[0];
+    shortStatusMessage = shortStatusMessages[sortedStatusMessages[0]];
+    longStatusMessage = [sortedStatusMessages[0] capitalizedString];
     
-    template.headerTextProvider = [CLKSimpleTextProvider textProviderWithText:@"Service Status"];
     template.row1Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:shortTrainsAffected shortText:nil accessibilityLabel:accessibleTrainsAffected];
-    template.row1Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:statusMessage];
+    template.row1Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:longStatusMessage shortText:shortStatusMessage accessibilityLabel:longStatusMessage];
     
     if ([trainsAffectedList count] == 1) {
-        // If we only have one disruption line, make line 3 the last updated timestamp.
+        // If we only have one status message to display, set the header text and make line 3 the last updated timestamp.
+        template.headerTextProvider = [CLKSimpleTextProvider textProviderWithText:@"Service Status"];
         template.row2Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:@"Updated"];
         template.row2Column2TextProvider = [CLKTimeTextProvider textProviderWithDate:timestamp];
-    } else if ([trainsAffectedList count] == 2) {
-        // If we only have two disruption lines, make line 3 the last updated timestamp.
-        longTrainsAffected = [trainsAffectedList[1] componentsJoinedByString:@""];
-        if ([longTrainsAffected length] > maxLength) {
-            shortTrainsAffected = [[longTrainsAffected substringToIndex:maxLength - 1] stringByAppendingString:@"+"];
-        } else {
-            shortTrainsAffected = longTrainsAffected;
-        }
-        accessibleTrainsAffected = [[trainsAffectedList[1] componentsJoinedByString:@", "] stringByAppendingString:@" trains"];
-        statusMessage = shortStatusMessages[sortedStatusMessages[1]];
-        accessibleStatusMessage = sortedStatusMessages[1];
-        
-        template.row2Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:shortTrainsAffected shortText:nil accessibilityLabel:accessibleTrainsAffected];
-        template.row2Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:statusMessage shortText:nil accessibilityLabel:accessibleStatusMessage];
     } else {
-        // There are three or more lines affected; lump them all and say "Multiple Issues".
-        NSMutableArray *remainingLines = [NSMutableArray array];
-        for (int i = 1 ; i < trainsAffectedList.count ; i++) {
-            NSArray *array = trainsAffectedList[i];
-            [remainingLines addObjectsFromArray:array];
-        }
-        
-        // Sorted so the lines we care about are first.
-        NSMutableArray *sortedTrainsAffected = [NSMutableArray array];
-        for (NSString *lineName in [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyLines]) {
-            if ([remainingLines containsObject:lineName]) {
-                [sortedTrainsAffected addObject:lineName];
-            }
-        }
-        
-        // From here it's like we did before.
-        longTrainsAffected = [sortedTrainsAffected componentsJoinedByString:@""];
-        if ([longTrainsAffected length] > maxLength) {
-            shortTrainsAffected = [[longTrainsAffected substringToIndex:maxLength - 1] stringByAppendingString:@"+"];
-        } else {
-            shortTrainsAffected = longTrainsAffected;
-        }
-        accessibleTrainsAffected = [[sortedTrainsAffected componentsJoinedByString:@", "] stringByAppendingString:@" trains"];
-        statusMessage = @"Issues";
-        accessibleStatusMessage = @"Multiple Issues";
+        // Otherwise, we have two or more status messages to display; include the last updated timestamp in the header.
+        template.headerTextProvider = [CLKTextProvider textProviderWithFormat:@"Status at %@", [CLKTimeTextProvider textProviderWithDate:timestamp]];
 
-        template.row2Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:shortTrainsAffected shortText:nil accessibilityLabel:accessibleTrainsAffected];
-        template.row2Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:statusMessage shortText:nil accessibilityLabel:accessibleStatusMessage];
+        if ([trainsAffectedList count] == 2) {
+            // If we have exactly two status messages to display, line 2 is that status messages
+            longTrainsAffected = [trainsAffectedList[1] componentsJoinedByString:@""];
+            if ([longTrainsAffected length] > maxLength) {
+                shortTrainsAffected = [[longTrainsAffected substringToIndex:maxLength - 1] stringByAppendingString:@"+"];
+            } else {
+                shortTrainsAffected = longTrainsAffected;
+            }
+            accessibleTrainsAffected = [[trainsAffectedList[1] componentsJoinedByString:@", "] stringByAppendingString:@" trains"];
+            shortStatusMessage = shortStatusMessages[sortedStatusMessages[1]];
+            longStatusMessage = [sortedStatusMessages[1] capitalizedString];
+
+            template.row2Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:shortTrainsAffected shortText:nil accessibilityLabel:accessibleTrainsAffected];
+            template.row2Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:longStatusMessage shortText:shortStatusMessage accessibilityLabel:longStatusMessage];
+        } else {
+            // Otherwise, we have three or more status messages to display; lump them all and say "Multiple Issues" in line 2.
+            NSMutableArray *remainingLines = [NSMutableArray array];
+            for (int i = 1 ; i < trainsAffectedList.count ; i++) {
+                NSArray *array = trainsAffectedList[i];
+                [remainingLines addObjectsFromArray:array];
+            }
+
+            // Sort the trains so the lines we care about are first.
+            NSMutableArray *sortedTrainsAffected = [NSMutableArray array];
+            for (NSString *lineName in [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsKeyLines]) {
+                if ([remainingLines containsObject:lineName]) {
+                    [sortedTrainsAffected addObject:lineName];
+                }
+            }
+
+            // From here it's like we did before.
+            longTrainsAffected = [sortedTrainsAffected componentsJoinedByString:@""];
+            if ([longTrainsAffected length] > maxLength) {
+                shortTrainsAffected = [[longTrainsAffected substringToIndex:maxLength - 1] stringByAppendingString:@"+"];
+            } else {
+                shortTrainsAffected = longTrainsAffected;
+            }
+            accessibleTrainsAffected = [[sortedTrainsAffected componentsJoinedByString:@", "] stringByAppendingString:@" trains"];
+            shortStatusMessage = @"Issues";
+            longStatusMessage = @"Multiple Issues";
+
+            template.row2Column1TextProvider = [CLKSimpleTextProvider textProviderWithText:shortTrainsAffected shortText:nil accessibilityLabel:accessibleTrainsAffected];
+            template.row2Column2TextProvider = [CLKSimpleTextProvider textProviderWithText:longStatusMessage shortText:shortStatusMessage accessibilityLabel:longStatusMessage];
+        }
     }
-    
+
     return [CLKComplicationTimelineEntry entryWithDate:[NSDate date] complicationTemplate:template];
 }
 
